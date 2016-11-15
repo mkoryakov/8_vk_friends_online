@@ -1,3 +1,4 @@
+import getpass
 import vk
 
 
@@ -10,7 +11,7 @@ def get_user_login():
 
 
 def get_user_password():
-    password = input('Введите пароль пользователя: ')
+    password = getpass.getpass('Введите пароль пользователя: ')
     return password
 
 
@@ -24,15 +25,9 @@ def get_online_friends(login, password):
     api = vk.API(session)
     id_friends_online = api.friends.getOnline()
     if id_friends_online:
-        friends_info = api.users.get(user_ids=id_friends_online)
+        return api.users.get(user_ids=id_friends_online)
     else:
         return []
-    friends_online = []
-    for friend in friends_info:
-        friend_name = '%s %s' % (friend['first_name'],
-                                 friend['last_name'])
-        friends_online.append(friend_name)
-    return friends_online
 
 
 def output_friends_to_console(friends_online):
@@ -40,7 +35,9 @@ def output_friends_to_console(friends_online):
         print('Нет друзей в сети.')
         return
     for friend in friends_online:
-        print(friend)
+        friend_name = '%s %s' % (friend['first_name'],
+                                 friend['last_name'])
+        print(friend_name)
 
 
 if __name__ == '__main__':
